@@ -1,0 +1,29 @@
+[project]
+name = "zarr-bench"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipython>=9.0.1",
+    "kvikio-cu12>=25.2.1",
+    "kvikio-zarr-v3",
+    "nvtx>=0.2.11",
+]
+
+[tool.uv.sources]
+kvikio-zarr-v3 = { git = "https://github.com/TomAugspurger/kvikio-zarr-v3" }
+
+
+[tool.uv]
+override-dependencies = [
+    # "zarr @ git+https://github.com/akshaysubr/zarr-python@gpu-codecs",
+    "zarr==3.0.4",
+    "nvidia-nvcomp-cu12==4.2.0.14",
+]
+
+[[tool.uv.index]]
+name = "kvikio"
+url = "https://pypi.anaconda.org/rapidsai-wheels-nightly/simple/"
+explicit = true
+
