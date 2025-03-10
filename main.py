@@ -1,11 +1,12 @@
 import zarr
 import zarr.abc.store
-import nvtx
-import cupy as cp
 import numpy as np
 import zarr.storage
-import kvikio_zarr_v3
 import memray
+# these are for GPU. Split this outt
+# import kvikio_zarr_v3
+# import nvtx
+# import cupy as cp
 
 SHAPE = (100, 1000, 1000)
 CHUNKS = (10, 1000, 1000)
@@ -30,13 +31,13 @@ def read_compressed(store: zarr.abc.store.Store, path: str) -> None:
         return z[:]
 
 
-def write_compressed(store: zarr.abc.store.Store, arr: cp.ndarray | np.ndarray) -> None:
+def write_compressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
     with memray.Tracker("write-compressed.bin", native_traces=True):
         z = zarr.create_array(store, name=COMPRESSED_PATH, shape=arr.shape, dtype=arr.dtype, overwrite=True)
         z[:] = arr
 
 
-def write_uncompressed(store: zarr.abc.store.Store, arr: cp.ndarray | np.ndarray) -> None:
+def write_uncompressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
     with zarr.config.set({"array.v3_default_compressors": UNCOMPRESSED_CONFIG}):
         with memray.Tracker("write-uncompressed.bin", native_traces=True):
             z = zarr.create_array(store, name=UNCOMPRESSED_PATH, shape=arr.shape, dtype=arr.dtype, overwrite=True)

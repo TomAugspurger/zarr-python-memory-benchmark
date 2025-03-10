@@ -6,8 +6,8 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "ipython>=9.0.1",
-    "kvikio-cu12>=25.2.1",
     "kvikio-zarr-v3",
+    "memray>=1.16.0",
     "nvtx>=0.2.11",
 ]
 
@@ -26,4 +26,13 @@ override-dependencies = [
 name = "kvikio"
 url = "https://pypi.anaconda.org/rapidsai-wheels-nightly/simple/"
 explicit = true
+
+[dependency-groups]
+dev = [
+    "ipython>=9.0.1",
+    "mypy>=1.15.0",
+]
+gpu = [
+    "kvikio-cu12>=25.2.1",
+]
 
