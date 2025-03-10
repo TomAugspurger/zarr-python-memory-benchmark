@@ -1,4 +1,6 @@
+import asyncio
 import pathlib
+import concurrent.futures
 import shutil
 
 import zarr
@@ -72,6 +74,10 @@ def write_uncompressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
 
 def main():
     arr_cpu = np.random.randn(*SHAPE).astype("float32")
+    loop = asyncio.new_event_loop()
+    pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    loop.set_default_executor(pool)
+
     p = pathlib.Path("reports")
     shutil.rmtree(p, ignore_errors=True)
     p.mkdir(parents=True, exist_ok=True)
