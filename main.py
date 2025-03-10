@@ -1,4 +1,5 @@
 import pathlib
+import shutil
 
 import zarr
 import zarr.abc.store
@@ -21,6 +22,14 @@ CHUNKS = (10, 1000, 1000)
 # - What's the speed of light from GPU to ndarray (compressed)?
 #   - this is the throughput of the decompression hardware / software
 
+# Expectations
+
+## Read, uncompressed
+# This benchmark reads uncompressed data into an ndarray.
+# There are 10 chunks, each 1000x1000. With 4 bytes per element,
+# 400000000 bytes, or 400MB per chunk.
+
+
 UNCOMPRESSED_PATH = "/uncompressed"
 COMPRESSED_PATH = "/compressed"
 UNCOMPRESSED_CONFIG = {"numeric": [], "string": [], "bytes": []}
@@ -42,6 +51,7 @@ def write_compressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
             shape=arr.shape,
             dtype=arr.dtype,
             overwrite=True,
+            chunks=CHUNKS,
         )
         z[:] = arr
 
@@ -55,6 +65,7 @@ def write_uncompressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
                 shape=arr.shape,
                 dtype=arr.dtype,
                 overwrite=True,
+                chunks=CHUNKS,
             )
             z[:] = arr
 
@@ -62,6 +73,7 @@ def write_uncompressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
 def main():
     arr_cpu = np.random.randn(*SHAPE).astype("float32")
     p = pathlib.Path("reports")
+    shutil.rmtree(p, ignore_errors=True)
     p.mkdir(parents=True, exist_ok=True)
     # arr_gpu = cp.asarray(arr_cpu)
 
