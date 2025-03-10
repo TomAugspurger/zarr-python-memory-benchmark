@@ -1,5 +1,7 @@
 # zarr memory benchmark
 
+Discussion: https://github.com/zarr-developers/zarr-python/issues/2904
+
 This benchmark writes a `(100, 1000, 1000)` ndarray of `float32` data split into `10` chunks along the first dimension.
 
 Component | Shape               | nbytes      |
