@@ -1,3 +1,5 @@
+import pathlib
+
 import zarr
 import zarr.abc.store
 import numpy as np
@@ -24,28 +26,43 @@ COMPRESSED_PATH = "/compressed"
 UNCOMPRESSED_CONFIG = {"numeric": [], "string": [], "bytes": []}
 
 
-
-def read_compressed(store: zarr.abc.store.Store, path: str) -> None:
-    with memray.Tracker(f"read-{path.lower().lstrip("/")}.bin", native_traces=True):
+def read(store: zarr.abc.store.Store, path: str) -> None:
+    with memray.Tracker(
+        f"reports/read-{path.lower().lstrip('/')}.bin", native_traces=True
+    ):
         z = zarr.open_array(store, mode="r", path=path)
         return z[:]
 
 
 def write_compressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
-    with memray.Tracker("write-compressed.bin", native_traces=True):
-        z = zarr.create_array(store, name=COMPRESSED_PATH, shape=arr.shape, dtype=arr.dtype, overwrite=True)
+    with memray.Tracker("reports/write-compressed.bin", native_traces=True):
+        z = zarr.create_array(
+            store,
+            name=COMPRESSED_PATH,
+            shape=arr.shape,
+            dtype=arr.dtype,
+            overwrite=True,
+        )
         z[:] = arr
 
 
 def write_uncompressed(store: zarr.abc.store.Store, arr: np.ndarray) -> None:
     with zarr.config.set({"array.v3_default_compressors": UNCOMPRESSED_CONFIG}):
-        with memray.Tracker("write-uncompressed.bin", native_traces=True):
-            z = zarr.create_array(store, name=UNCOMPRESSED_PATH, shape=arr.shape, dtype=arr.dtype, overwrite=True)
+        with memray.Tracker("reports/write-uncompressed.bin", native_traces=True):
+            z = zarr.create_array(
+                store,
+                name=UNCOMPRESSED_PATH,
+                shape=arr.shape,
+                dtype=arr.dtype,
+                overwrite=True,
+            )
             z[:] = arr
 
 
 def main():
     arr_cpu = np.random.randn(*SHAPE).astype("float32")
+    p = pathlib.Path("reports")
+    p.mkdir(parents=True, exist_ok=True)
     # arr_gpu = cp.asarray(arr_cpu)
 
     store = zarr.storage.LocalStore("/tmp/data.zarr")
@@ -56,10 +73,11 @@ def main():
     write_compressed(store, arr_cpu)
 
     print("CPU - read - uncompressed")
-    read_compressed(store, path=UNCOMPRESSED_PATH)
+    read(store, path=UNCOMPRESSED_PATH)
 
     print("CPU - read - compressed")
-    read_compressed(store, path=COMPRESSED_PATH)
+    read(store, path=COMPRESSED_PATH)
+
 
 if __name__ == "__main__":
     main()
