@@ -27,9 +27,9 @@ CHUNKS = (10, 1000, 1000)
 # Expectations
 
 ## Read, uncompressed
-# This benchmark reads uncompressed data into an ndarray.
-# There are 10 chunks, each 1000x1000. With 4 bytes per element,
-# 400000000 bytes, or 400MB per chunk.
+# This benchmark reads uncompressed data into an ndarray. There are 10 chunks,
+# each 1000x1000. With 4 bytes per element, 400000000 bytes, or 40MB (38.1 MiB)
+# per chunk, and 400MB (381.5 MiB) total.
 
 
 UNCOMPRESSED_PATH = "/uncompressed"
