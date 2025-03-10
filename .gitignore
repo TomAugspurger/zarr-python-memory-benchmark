@@ -11,6 +11,5 @@ wheels/
 
 # other
 *.bin
-*.html
 cufile.log
 *.nsys-rep
