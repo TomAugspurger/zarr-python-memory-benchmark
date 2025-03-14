@@ -39,5 +39,5 @@ We would optimially use `readinto` into the memory backing the `out` ndarray. Wi
 
 As a test for what's possible, `sol.py` implements basic reads for compressed and uncompressed data.
 
-- [read uncompressed](https://rawcdn.githack.com/TomAugspurger/zarr-python-memory-benchmark/3567246b852d7adacbc10f32a58b0b3f6ac3d50b/reports/memray-flamegraph-sol-read-uncompressed.html): 734.1 MiB (size of the array + size of the compressed data. Best we can do.)
-- [read compressed](https://rawcdn.githack.com/TomAugspurger/zarr-python-memory-benchmark/3567246b852d7adacbc10f32a58b0b3f6ac3d50b/reports/memray-flamegraph-sol-read-compressed.html): 381.5 MiB (~1x the size of the array. Best we can do.)
+- [read uncompressed](https://rawcdn.githack.com/TomAugspurger/zarr-python-memory-benchmark/3567246b852d7adacbc10f32a58b0b3f6ac3d50b/reports/memray-flamegraph-sol-read-uncompressed.html): 381.5 MiB (~1x the size of the array. Best we can do.)
+- [read compressed](https://rawcdn.githack.com/TomAugspurger/zarr-python-memory-benchmark/3567246b852d7adacbc10f32a58b0b3f6ac3d50b/reports/memray-flamegraph-sol-read-compressed.html): 734.1 MiB (size of the array + size of the compressed data. Best we can do.)
